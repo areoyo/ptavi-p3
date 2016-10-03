@@ -10,60 +10,26 @@ class smallSMILHandler(ContentHandler):
         """
         Constructor. Inicializamos las variables
         """
-        self.root_layout = {}
-        self.region = {}
-        self.img = {}
-        self.audio = {}
-        self.textstream = {}
         self.misdatos = []
-       
+        self.atributos = {'root-layout': ['width', 'height', 'background-color'],
+                          'region': ['id', 'top', 'bottom', 'left', 'right'],
+                          'img': ['src', 'region','begin', 'dur'],
+                          'audio': ['src', 'begin', 'dur'],
+                          'textstream': ['src', 'region']}
+        self.etiquetas = ['root-layout', 'region', 'img', 'audio', 'textstream']
+
+
     def startElement(self, name, attrs):
         """
         Método que se llama cuando se abre una etiqueta
         """
-        if name == 'root-layout':
-            # De esta manera tomamos los valores de los atributos
-            self.root_layout = {'width': str(attrs.get('width',"")), 
-                                'height': str(attrs.get('height',"")), 
-                                'background-color': str(attrs.get('background-color',""))}
-                              
-            self.misdatos.append(self.root_layout)
-            self.root_layout = {}
+        dicc = {}        
+        if name in self.etiquetas:
+            dicc = {'tag': name}
+            for atributo in self.atributos[name]:
+                dicc[atributo] = str(attrs.get(atributo,"")) 
+            self.misdatos.append(dicc)
 
-        elif name == 'region':
-            self.region = {'id': str(attrs.get('id',"")),
-                           'top': str(attrs.get('top',"")),
-                           'bottom': str(attrs.get('bottom',"")),
-                           'left': str(attrs.get('left',"")),
-                           'right': str(attrs.get('right',""))}
-
-            self.misdatos.append(self.region)
-            self.region = {}
-            
-        elif name == 'img':     
-            self.img = {'src': str(attrs.get('src',"")),
-                        'region': str(attrs.get('region',"")),
-                        'begin': str(attrs.get('begin',"")),
-                        'dur': str(attrs.get('dur',""))}
-
-            self.misdatos.append(self.img)
-            self.img = {}
-            
-        elif name == 'audio':
-            self.audio = {'src': str(attrs.get('src',"")),
-                          'begin': str(attrs.get('begin',"")),
-                          'dur': str(attrs.get('dur', ""))}
-
-            self.misdatos.append(self.audio)
-            self.audio = {}
-            
-        elif name == 'textstream':
-            self.textstream = {'src': str(attrs.get('src',"")),
-                               'region': str(attrs.get('region',""))}
-
-            self.misdatos.append(self.textstream)
-            self.textstream = {}
-            
     def get_tags (self):
         """
         Método que se llama para guardar la lista de datos
