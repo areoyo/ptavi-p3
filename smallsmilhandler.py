@@ -26,35 +26,48 @@ class smallSMILHandler(ContentHandler):
             self.root_layout = {'width': str(attrs.get('width',"")), 
                                 'height': str(attrs.get('height',"")), 
                                 'background-color': str(attrs.get('background-color',""))}
-            print(self.root_layout)                  
+                              
+            self.misdatos.append(self.root_layout)
+            self.root_layout = {}
+
         elif name == 'region':
             self.region = {'id': str(attrs.get('id',"")),
                            'top': str(attrs.get('top',"")),
                            'bottom': str(attrs.get('bottom',"")),
                            'left': str(attrs.get('left',"")),
                            'right': str(attrs.get('right',""))}
-            print(self.region)
+
+            self.misdatos.append(self.region)
+            self.region = {}
+            
         elif name == 'img':     
             self.img = {'src': str(attrs.get('src',"")),
                         'region': str(attrs.get('region',"")),
                         'begin': str(attrs.get('begin',"")),
                         'dur': str(attrs.get('dur',""))}
-            print(self.img)
+
+            self.misdatos.append(self.img)
+            self.img = {}
+            
         elif name == 'audio':
             self.audio = {'src': str(attrs.get('src',"")),
                           'begin': str(attrs.get('begin',"")),
                           'dur': str(attrs.get('dur', ""))}
-            print(self.audio)
+
+            self.misdatos.append(self.audio)
+            self.audio = {}
+            
         elif name == 'textstream':
             self.textstream = {'src': str(attrs.get('src',"")),
                                'region': str(attrs.get('region',""))}
-            print(self.textstream)
+
+            self.misdatos.append(self.textstream)
+            self.textstream = {}
+            
     def get_tags (self):
         """
         Método que se llama para guardar la lista de datos
         """
-
-        
         return self.misdatos
         
 if __name__ == "__main__":
@@ -66,5 +79,8 @@ if __name__ == "__main__":
     parser.setContentHandler(kHandler)
     parser.parse(open('karaoke.smil'))
     mis_datos = kHandler.get_tags()
+
+    for atribute in mis_datos:
+        print(atribute)
 
         
