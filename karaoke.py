@@ -6,6 +6,7 @@ from xml.sax.handler import ContentHandler
 import sys
 import smallsmilhandler
 import json
+import urllib.request
     
 def file_JSON(data):
     fichjson = open(sys.argv[1].split('.')[0]+'.json','w')
@@ -34,6 +35,13 @@ if __name__ == "__main__":
         tag = atributos['tag']
         del atributos['tag']
         line = str(tag+'\t')
+        
         for atribute in atributos:
+            if atributos[atribute][:7] == 'http://':
+                print('DESCARGO')
+                name = atributos[atribute].split('/')[-1]
+                url = urllib.request.urlretrieve(atributos[atribute], name )
+                atributos[atribute] = name
+        
             line = line+atribute+"="+atributos[atribute]+'\t'
         print(line)
