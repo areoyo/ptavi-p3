@@ -8,6 +8,7 @@ import smallsmilhandler
 import json
 import urllib.request
 
+
 class karaokeLocal():
     def init(self, f):
         parser = make_parser()
@@ -15,8 +16,8 @@ class karaokeLocal():
         parser.setContentHandler(self.kHandler)
         parser.parse(f)
         self.data = self.kHandler.get_tags()
-        
-    def __str__ (self):
+
+    def __str__(self):
         for atributos in self.data:
             tag = atributos['tag']
             line = str(tag+'\t')
@@ -24,12 +25,12 @@ class karaokeLocal():
                 if atributos != tag:
                     line = line+atribute+"="+atributos[atribute]+'\t'
             print(line)
-    
+
     def to_json(self, filename):
-        fichjson = open(filename.split('.')[0]+'.json','w')
+        fichjson = open(filename.split('.')[0]+'.json', 'w')
         fichjson.write(json.dumps(self.data))
         fichjson.close()
-    
+
     def do_local(self):
         for atributos in self.data:
             for atribute in atributos:           
@@ -37,7 +38,7 @@ class karaokeLocal():
                     name = atributos[atribute].split('/')[-1]
                     url = urllib.request.urlretrieve(atributos[atribute], name)
                     atributos[atribute] = name
-    
+
 if __name__ == "__main__":
     """
     Programa principal
@@ -46,13 +47,12 @@ if __name__ == "__main__":
         fich = open(sys.argv[1], 'r')
     except IndexError:
         sys.exit("Usage: python3 karaoke.py file.smil")
-        
+
     karaoke = karaokeLocal()
-    
+
     karaoke.init(fich)
     karaoke.__str__()
     karaoke.to_json(sys.argv[1])
     karaoke.do_local()
     karaoke.to_json('local')
     karaoke.__str__()
-
