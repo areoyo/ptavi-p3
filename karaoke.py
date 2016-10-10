@@ -7,12 +7,36 @@ import sys
 import smallsmilhandler
 import json
 import urllib.request
+
+class karaokeLocal():
+    def init(self, f):
+        parser = make_parser()
+        self.kHandler = smallsmilhandler.smallSMILHandler()
+        parser.setContentHandler(self.kHandler)
+        parser.parse(f)
+        self.data = self.kHandler.get_tags()
+        
+    def __str__ (self):
+        for atributos in self.data:
+            tag = atributos['tag']
+            line = str(tag+'\t')
+            for atribute in atributos:
+                if atributos != tag:
+                    line = line+atribute+"="+atributos[atribute]+'\t'
+            print(line)
     
-def file_JSON(data):
-    fichjson = open(sys.argv[1].split('.')[0]+'.json','w')
-    fichjson.write(json.dumps(data))
-    fichjson.close()
+    def to_json(self, filename):
+        fichjson = open(filename.split('.')[0]+'.json','w')
+        fichjson.write(json.dumps(self.data))
+        fichjson.close()
     
+    def do_local(self):
+        for atributos in self.data:
+            for atribute in atributos:           
+                if atributos[atribute][:7] == 'http://':
+                    name = atributos[atribute].split('/')[-1]
+                    url = urllib.request.urlretrieve(atributos[atribute], name)
+                    atributos[atribute] = name
     
 if __name__ == "__main__":
     """
@@ -23,25 +47,12 @@ if __name__ == "__main__":
     except IndexError:
         sys.exit("Usage: python3 karaoke.py file.smil")
         
-    parser = make_parser()
-    kHandler = smallsmilhandler.smallSMILHandler()
-    parser.setContentHandler(kHandler)
-    parser.parse(fich)
-    mis_datos = kHandler.get_tags()
+    karaoke = karaokeLocal()
     
-    file_JSON(mis_datos)
+    karaoke.init(fich)
+    karaoke.__str__()
+    karaoke.to_json(sys.argv[1])
+    karaoke.do_local()
+    karaoke.to_json('local')
+    karaoke.__str__()
 
-    for atributos in mis_datos:
-        tag = atributos['tag']
-        del atributos['tag']
-        line = str(tag+'\t')
-        
-        for atribute in atributos:
-            if atributos[atribute][:7] == 'http://':
-                print('DESCARGO')
-                name = atributos[atribute].split('/')[-1]
-                url = urllib.request.urlretrieve(atributos[atribute], name )
-                atributos[atribute] = name
-        
-            line = line+atribute+"="+atributos[atribute]+'\t'
-        print(line)
