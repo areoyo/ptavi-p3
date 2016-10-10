@@ -5,9 +5,13 @@ from xml.sax import make_parser
 from xml.sax.handler import ContentHandler
 import sys
 import smallsmilhandler
+import json
 
-fich = open(sys.argv[1], 'r')
-
+try:
+    fich = open(sys.argv[1], 'r')
+except IndexError:
+    sys.exit("Usage: python3 karaoke.py file.smil")
+    
 if __name__ == "__main__":
     """
     Programa principal
@@ -25,6 +29,3 @@ if __name__ == "__main__":
         for atribute in atributos:
             line = line+atribute+"="+atributos[atribute]+'\t'
         print(line)
-
-
-#root-layout\twidth="248"\theight="300"\tbackground-color="blue"\region\tid="a"\ttop="20"\tleft="64"\n
