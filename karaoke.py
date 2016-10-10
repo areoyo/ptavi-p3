@@ -6,21 +6,29 @@ from xml.sax.handler import ContentHandler
 import sys
 import smallsmilhandler
 import json
-
-try:
-    fich = open(sys.argv[1], 'r')
-except IndexError:
-    sys.exit("Usage: python3 karaoke.py file.smil")
+    
+def file_JSON(data):
+    fichjson = open(sys.argv[1].split('.')[0]+'.json','w')
+    fichjson.write(json.dumps(data))
+    fichjson.close()
+    
     
 if __name__ == "__main__":
     """
     Programa principal
     """
+    try:
+        fich = open(sys.argv[1], 'r')
+    except IndexError:
+        sys.exit("Usage: python3 karaoke.py file.smil")
+        
     parser = make_parser()
     kHandler = smallsmilhandler.smallSMILHandler()
     parser.setContentHandler(kHandler)
     parser.parse(fich)
     mis_datos = kHandler.get_tags()
+    
+    file_JSON(mis_datos)
 
     for atributos in mis_datos:
         tag = atributos['tag']
