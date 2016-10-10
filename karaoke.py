@@ -33,7 +33,7 @@ class karaokeLocal():
 
     def do_local(self):
         for atributos in self.data:
-            for atribute in atributos:           
+            for atribute in atributos:
                 if atributos[atribute][:7] == 'http://':
                     name = atributos[atribute].split('/')[-1]
                     url = urllib.request.urlretrieve(atributos[atribute], name)
