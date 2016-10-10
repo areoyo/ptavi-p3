@@ -13,10 +13,10 @@ class smallSMILHandler(ContentHandler):
         """
         self.misdatos = []
         self.attrs = {'root-layout': ['width', 'height', 'background-color'],
-                          'region': ['id', 'top', 'bottom', 'left', 'right'],
-                          'img': ['src', 'region', 'begin', 'dur'],
-                          'audio': ['src', 'begin', 'dur'],
-                          'textstream': ['src', 'region']}
+                      'region': ['id', 'top', 'bottom', 'left', 'right'],
+                      'img': ['src', 'region', 'begin', 'dur'],
+                      'audio': ['src', 'begin', 'dur'],
+                      'textstream': ['src', 'region']}
 
     def startElement(self, name, atributes):
         """
@@ -26,7 +26,7 @@ class smallSMILHandler(ContentHandler):
         if name in self.attrs:
             dicc = {'tag': name}
             for atributo in self.attrs[name]:
-                dicc[atributo] = str(atributes.get(atributo, "")) 
+                dicc[atributo] = str(atributes.get(atributo, ""))
             self.misdatos.append(dicc)
 
     def get_tags(self):
