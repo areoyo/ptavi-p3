@@ -16,15 +16,13 @@ class smallSMILHandler(ContentHandler):
                           'img': ['src', 'region','begin', 'dur'],
                           'audio': ['src', 'begin', 'dur'],
                           'textstream': ['src', 'region']}
-        self.etiquetas = ['root-layout', 'region', 'img', 'audio', 'textstream']
-
 
     def startElement(self, name, attrs):
         """
         Método que se llama cuando se abre una etiqueta
         """
         dicc = {}        
-        if name in self.etiquetas:
+        if name in self.atributos:
             dicc = {'tag': name}
             for atributo in self.atributos[name]:
                 dicc[atributo] = str(attrs.get(atributo,"")) 
@@ -35,18 +33,3 @@ class smallSMILHandler(ContentHandler):
         Método que se llama para guardar la lista de datos
         """
         return self.misdatos
-        
-if __name__ == "__main__":
-    """
-    Programa principal
-    """
-    parser = make_parser()
-    kHandler = smallSMILHandler()
-    parser.setContentHandler(kHandler)
-    parser.parse(open('karaoke.smil'))
-    mis_datos = kHandler.get_tags()
-
-    for atribute in mis_datos:
-        print(atribute)
-
-        
